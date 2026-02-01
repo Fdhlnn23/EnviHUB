@@ -1,7 +1,6 @@
 -- ENVI HUB LOADER (RAW GITHUB)
 
-local BASE =
-"https://raw.githubusercontent.com/Fdhlnn23/EnviHUB/main/envi/"
+local BASE = "https://raw.githubusercontent.com/Fdhlnn23/EnviHUB/envi/"
 
 local FILES = {
     init = "init.lua",
