@@ -1,31 +1,36 @@
--- ENVI HUB LOADER (RAW GITHUB)
+-- ENVI HUB LOADER (STABLE VERSION)
 
-local BASE = "https://raw.githubusercontent.com/Fdhlnn23/EnviHUB/envi/"
+local BASE =
+"https://raw.githubusercontent.com/Fdhlnn23/EnviHUB/envi/"
 
 local FILES = {
-    init = "init.lua",
-    window = "window.lua",
-    elements = "elements.lua",
-    icons = "icons.lua",
-    theme = "theme.lua",
+    "theme",
+    "icons",
+    "elements",
+    "window",
+    "init",
 }
 
 local Modules = {}
 
-local function fakeRequire(name)
-    if Modules[name] then
-        return Modules[name]
+-- custom require
+local function requireModule(name)
+    if not Modules[name] then
+        error("[EnviHUB] Module not loaded: "..name)
     end
-    error("Module not found: "..tostring(name))
+    return Modules[name]
 end
 
-for name, file in pairs(FILES) do
-    local src = game:HttpGet(BASE .. file)
+for _, name in ipairs(FILES) do
+    local src = game:HttpGet(BASE .. name .. ".lua")
     local fn = loadstring(src)
-    setfenv(fn, setmetatable({
-        require = fakeRequire,
+
+    local env = setmetatable({
+        require = requireModule,
         script = {},
-    }, { __index = getfenv() }))
+    }, { __index = getfenv() })
+
+    setfenv(fn, env)
     Modules[name] = fn()
 end
 
