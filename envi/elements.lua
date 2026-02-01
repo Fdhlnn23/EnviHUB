@@ -14,8 +14,8 @@ function Elements:Paragraph(parent, theme, opt)
     txt.Size = UDim2.new(1,-20,1,0)
     txt.Position = UDim2.new(0,10,0,0)
     txt.TextWrapped = true
-    txt.TextXAlignment = Left
-    txt.TextYAlignment = Center
+    txt.TextXAlignment = Enum.TextXAlignment.Left
+    txt.TextYAlignment = Enum.TextYAlignment.Center
     txt.Text = opt.Title or "Paragraph"
     txt.Font = Enum.Font.Gotham
     txt.TextSize = 13
@@ -54,7 +54,7 @@ function Elements:Toggle(parent, theme, opt)
     local label = Instance.new("TextLabel", frame)
     label.Size = UDim2.new(1,-60,1,0)
     label.Position = UDim2.new(0,10,0,0)
-    label.TextXAlignment = Left
+    label.TextXAlignment = Enum.TextXAlignment.Left
     label.Text = opt.Title or "Toggle"
     label.Font = Enum.Font.Gotham
     label.TextSize = 13
