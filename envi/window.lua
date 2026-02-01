@@ -121,5 +121,6 @@ function Window:CreateTab(text, iconId)
         Elements:Dropdown(Page, Theme, opt)
     end
 
-    return Tab
+    return Window
 end
+
