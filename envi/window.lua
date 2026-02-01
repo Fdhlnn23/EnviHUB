@@ -7,9 +7,7 @@ local tabCount = 0
 function Window:CreateTab(text, iconId)
     tabCount += 1
 
-    -- =====================
     -- TAB BUTTON
-    -- =====================
     local TabBtn = Instance.new("TextButton")
     TabBtn.Name = text .. "_Tab"
     TabBtn.Parent = Sidebar
@@ -20,9 +18,7 @@ function Window:CreateTab(text, iconId)
     TabBtn.AutoButtonColor = false
     Instance.new("UICorner", TabBtn).CornerRadius = UDim.new(0, 6)
 
-    -- =====================
     -- INDICATOR
-    -- =====================
     local Indicator = Instance.new("Frame")
     Indicator.Parent = TabBtn
     Indicator.BackgroundColor3 = Theme.Accent
@@ -31,17 +27,13 @@ function Window:CreateTab(text, iconId)
     Indicator.Visible = false
     Instance.new("UICorner", Indicator).CornerRadius = UDim.new(1, 0)
 
-    -- =====================
     -- CONTAINER
-    -- =====================
     local Container = Instance.new("Frame")
     Container.Parent = TabBtn
     Container.Size = UDim2.new(1, 0, 1, 0)
     Container.BackgroundTransparency = 1
 
-    -- =====================
     -- ICON
-    -- =====================
     local IconImg = Instance.new("ImageLabel")
     IconImg.Parent = Container
     IconImg.Size = UDim2.fromOffset(20, 20)
@@ -50,9 +42,7 @@ function Window:CreateTab(text, iconId)
     IconImg.Image = iconId or ""
     IconImg.ImageColor3 = Theme.Text
 
-    -- =====================
     -- LABEL
-    -- =====================
     local TabLabel = Instance.new("TextLabel")
     TabLabel.Parent = Container
     TabLabel.Size = UDim2.new(1, -45, 1, 0)
@@ -64,9 +54,7 @@ function Window:CreateTab(text, iconId)
     TabLabel.TextSize = 14
     TabLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- =====================
     -- PAGE
-    -- =====================
     local Page = Instance.new("Frame")
     Page.Parent = Content
     Page.Size = UDim2.new(1, 0, 1, 0)
@@ -77,21 +65,16 @@ function Window:CreateTab(text, iconId)
     PageLayout.Parent = Page
     PageLayout.Padding = UDim.new(0, 10)
 
-    -- =====================
-    -- TAB CLICK
-    -- =====================
+    -- CLICK
     TabBtn.MouseButton1Click:Connect(function()
         if currentIndicator and currentIndicator ~= Indicator then
             TweenService:Create(
                 currentIndicator,
                 TweenInfo.new(0.2, Enum.EasingStyle.Quart),
-                { Size = UDim2.new(0, 3, 0, 0), Position = UDim2.new(0, 0, 0.5, 0) }
-            ):Play()
-
-            TweenService:Create(
-                currentIndicator.Parent,
-                TweenInfo.new(0.2),
-                { BackgroundTransparency = 1 }
+                {
+                    Size = UDim2.new(0, 3, 0, 0),
+                    Position = UDim2.new(0, 0, 0.5, 0)
+                }
             ):Play()
         end
 
@@ -107,44 +90,33 @@ function Window:CreateTab(text, iconId)
         TweenService:Create(
             Indicator,
             TweenInfo.new(0.3, Enum.EasingStyle.Back),
-            { Size = UDim2.new(0, 3, 0.6, 0), Position = UDim2.new(0, 0, 0.2, 0) }
-        ):Play()
-
-        TweenService:Create(
-            TabBtn,
-            TweenInfo.new(0.3),
-            { BackgroundTransparency = 0.8, BackgroundColor3 = Color3.new(1,1,1) }
+            {
+                Size = UDim2.new(0, 3, 0.6, 0),
+                Position = UDim2.new(0, 0, 0.2, 0)
+            }
         ):Play()
     end)
 
-    -- =====================
     -- AUTO OPEN FIRST TAB
-    -- =====================
     if not currentPage then
-        TabBtn:Activate()
         Page.Visible = true
+        Indicator.Visible = true
         currentPage = Page
         currentIndicator = Indicator
-        Indicator.Visible = true
     end
 
-    -- =====================
-    -- TAB API (ELEMENT)
-    -- =====================
+    -- TAB API
     local Tab = {}
 
     function Tab:Paragraph(opt)
         Elements:Paragraph(Page, Theme, opt)
     end
-
     function Tab:Button(opt)
         Elements:Button(Page, Theme, opt)
     end
-
     function Tab:Toggle(opt)
         Elements:Toggle(Page, Theme, opt)
     end
-
     function Tab:Dropdown(opt)
         Elements:Dropdown(Page, Theme, opt)
     end
