@@ -1,7 +1,7 @@
 -- ENVI HUB LOADER (STABLE VERSION)
 
 local BASE =
-"https://raw.githubusercontent.com/Fdhlnn23/EnviHUB/envi/"
+"https://raw.githubusercontent.com/Fdhlnn23/EnviHUB/refs/heads/main/envi/"
 
 local FILES = {
     "theme",
@@ -35,3 +35,4 @@ for _, name in ipairs(FILES) do
 end
 
 return Modules.init
+
