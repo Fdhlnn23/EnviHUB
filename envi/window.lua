@@ -3,8 +3,8 @@ local Player = Players.LocalPlayer
 local PlayerGui = Player:WaitForChild("PlayerGui")
 local TweenService = game:GetService("TweenService")
 
-local Theme = require("theme")
-local Elements = require("elements")
+local Theme = loadstring(game:HttpGet("https://raw.githubusercontent.com/Fdhlnn23/EnviHUB/refs/heads/main/envi/theme.lua"))()
+local Elements = loadstring(game:HttpGet(
 
 return function()
 
@@ -220,3 +220,4 @@ end
 
     return Window
 end
+
