@@ -1,125 +1,88 @@
-local TweenService = game:GetService("TweenService")
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local PlayerGui = Player:WaitForChild("PlayerGui")
 
-local currentIndicator = nil
-local currentPage = nil
-local tabCount = 0
+local Theme = require("theme")
+local Icons = require("icons")
+local Elements = require("elements")
 
-function Window:CreateTab(text, iconId)
-    tabCount += 1
+return function()
 
-    -- TAB BUTTON
-    local TabBtn = Instance.new("TextButton")
+    local gui = Instance.new("ScreenGui", PlayerGui)
+    gui.Name = "EnviUI"
+
+    local main = Instance.new("Frame", gui)
+    main.Size = UDim2.fromScale(0.7,0.75)
+    main.Position = UDim2.fromScale(0.15,0.12)
+    main.BackgroundColor3 = Theme.Background
+    main.BorderSizePixel = 0
+    Instance.new("UICorner", main).CornerRadius = UDim.new(0,12)
+
+    local sidebar = Instance.new("Frame", main)
+    sidebar.Size = UDim2.new(0,170,1,0)
+    sidebar.BackgroundColor3 = Theme.Panel
+    sidebar.BorderSizePixel = 0
+
+    local content = Instance.new("Frame", main)
+    content.Position = UDim2.new(0,170,0,0)
+    content.Size = UDim2.new(1,-170,1,0)
+    content.BackgroundTransparency = 1
+
+    local Window = {}
+
+    function Window.CreateTab(text, iconId)
+    tabCount = tabCount + 1
+    local TabBtn = Instance.new("TextButton", Sidebar)
     TabBtn.Name = text .. "_Tab"
-    TabBtn.Parent = Sidebar
-    TabBtn.LayoutOrder = tabCount
+    TabBtn.LayoutOrder = tabCount -- Penentu urutan
     TabBtn.Size = UDim2.new(1, -10, 0, 38)
     TabBtn.BackgroundTransparency = 1
     TabBtn.Text = ""
     TabBtn.AutoButtonColor = false
     Instance.new("UICorner", TabBtn).CornerRadius = UDim.new(0, 6)
 
-    -- INDICATOR
-    local Indicator = Instance.new("Frame")
-    Indicator.Parent = TabBtn
-    Indicator.BackgroundColor3 = Theme.Accent
-    Indicator.Size = UDim2.new(0, 3, 0, 0)
+    local Indicator = Instance.new("Frame", TabBtn)
+    Indicator.BackgroundColor3 = Color3.fromRGB(0, 220, 255)
+    Indicator.Size = UDim2.new(0, 3, 0, 0) 
     Indicator.Position = UDim2.new(0, 0, 0.5, 0)
     Indicator.Visible = false
     Instance.new("UICorner", Indicator).CornerRadius = UDim.new(1, 0)
 
-    -- CONTAINER
-    local Container = Instance.new("Frame")
-    Container.Parent = TabBtn
+    local Container = Instance.new("Frame", TabBtn)
     Container.Size = UDim2.new(1, 0, 1, 0)
     Container.BackgroundTransparency = 1
 
-    -- ICON
-    local IconImg = Instance.new("ImageLabel")
-    IconImg.Parent = Container
+    local IconImg = Instance.new("ImageLabel", Container)
     IconImg.Size = UDim2.fromOffset(20, 20)
     IconImg.Position = UDim2.new(0, 12, 0.5, -10)
     IconImg.BackgroundTransparency = 1
-    IconImg.Image = iconId or ""
-    IconImg.ImageColor3 = Theme.Text
+    IconImg.Image = iconId
+    IconImg.ImageColor3 = Color3.new(1, 1, 1)
 
-    -- LABEL
-    local TabLabel = Instance.new("TextLabel")
-    TabLabel.Parent = Container
+    local TabLabel = Instance.new("TextLabel", Container)
     TabLabel.Size = UDim2.new(1, -45, 1, 0)
     TabLabel.Position = UDim2.fromOffset(40, 0)
     TabLabel.BackgroundTransparency = 1
     TabLabel.Text = "|  " .. text
-    TabLabel.TextColor3 = Theme.Text
+    TabLabel.TextColor3 = Color3.new(1, 1, 1)
     TabLabel.Font = Enum.Font.GothamBold
     TabLabel.TextSize = 14
     TabLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- PAGE
-    local Page = Instance.new("Frame")
-    Page.Parent = Content
-    Page.Size = UDim2.new(1, 0, 1, 0)
-    Page.Visible = false
-    Page.BackgroundTransparency = 1
-
-    local PageLayout = Instance.new("UIListLayout")
-    PageLayout.Parent = Page
-    PageLayout.Padding = UDim.new(0, 10)
-
-    -- CLICK
     TabBtn.MouseButton1Click:Connect(function()
         if currentIndicator and currentIndicator ~= Indicator then
-            TweenService:Create(
-                currentIndicator,
-                TweenInfo.new(0.2, Enum.EasingStyle.Quart),
-                {
-                    Size = UDim2.new(0, 3, 0, 0),
-                    Position = UDim2.new(0, 0, 0.5, 0)
-                }
-            ):Play()
+            TweenService:Create(currentIndicator, TweenInfo.new(0.2, Enum.EasingStyle.Quart), {Size = UDim2.new(0, 3, 0, 0), Position = UDim2.new(0, 0, 0.5, 0)}):Play()
+            TweenService:Create(currentIndicator.Parent, TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
         end
-
-        if currentPage then
-            currentPage.Visible = false
-        end
-
         Indicator.Visible = true
-        Page.Visible = true
         currentIndicator = Indicator
-        currentPage = Page
-
-        TweenService:Create(
-            Indicator,
-            TweenInfo.new(0.3, Enum.EasingStyle.Back),
-            {
-                Size = UDim2.new(0, 3, 0.6, 0),
-                Position = UDim2.new(0, 0, 0.2, 0)
-            }
-        ):Play()
+        TweenService:Create(Indicator, TweenInfo.new(0.3, Enum.EasingStyle.Back), {Size = UDim2.new(0, 3, 0.6, 0), Position = UDim2.new(0, 0, 0.2, 0)}):Play()
+        TweenService:Create(TabBtn, TweenInfo.new(0.3), {BackgroundTransparency = 0.8, BackgroundColor3 = Color3.new(1,1,1)}):Play()
+        SwitchPage(text)
     end)
 
-    -- AUTO OPEN FIRST TAB
-    if not currentPage then
-        Page.Visible = true
-        Indicator.Visible = true
-        currentPage = Page
-        currentIndicator = Indicator
-    end
+    return CreatePage(text)
+end
 
-    -- TAB API
-    local Tab = {}
-
-    function Tab:Paragraph(opt)
-        Elements:Paragraph(Page, Theme, opt)
-    end
-    function Tab:Button(opt)
-        Elements:Button(Page, Theme, opt)
-    end
-    function Tab:Toggle(opt)
-        Elements:Toggle(Page, Theme, opt)
-    end
-    function Tab:Dropdown(opt)
-        Elements:Dropdown(Page, Theme, opt)
-    end
-
-    return Tab
+    return Window
 end
