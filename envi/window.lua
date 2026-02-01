@@ -34,7 +34,7 @@ return function()
         local btn = Instance.new("TextButton", sidebar)
         btn.Size = UDim2.new(1,-12,0,36)
         btn.Text = (Icons[name] or "•").."  "..name
-        btn.TextXAlignment = Left
+        btn.TextXAlignment = Enum.TextXAlignment.Left
         btn.Font = Enum.Font.Gotham
         btn.TextSize = 13
         btn.TextColor3 = Theme.Text
