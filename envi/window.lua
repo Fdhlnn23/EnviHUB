@@ -1,115 +1,153 @@
-local Players = game:GetService("Players")
-local Player = Players.LocalPlayer
-local PlayerGui = Player:WaitForChild("PlayerGui")
+local TweenService = game:GetService("TweenService")
 
-local Theme = require("theme")
-local Icons = require("icons")
-local Elements = require("elements")
+local currentIndicator = nil
+local currentPage = nil
+local tabCount = 0
 
-return function()
+function Window:CreateTab(text, iconId)
+    tabCount += 1
 
-    -- ScreenGui
-    local gui = Instance.new("ScreenGui")
-    gui.Name = "EnviUI"
-    gui.ResetOnSpawn = false
-    gui.Parent = PlayerGui
+    -- =====================
+    -- TAB BUTTON
+    -- =====================
+    local TabBtn = Instance.new("TextButton")
+    TabBtn.Name = text .. "_Tab"
+    TabBtn.Parent = Sidebar
+    TabBtn.LayoutOrder = tabCount
+    TabBtn.Size = UDim2.new(1, -10, 0, 38)
+    TabBtn.BackgroundTransparency = 1
+    TabBtn.Text = ""
+    TabBtn.AutoButtonColor = false
+    Instance.new("UICorner", TabBtn).CornerRadius = UDim.new(0, 6)
 
-    -- Main frame
-    local Main = Instance.new("Frame")
-    Main.Parent = gui
-    Main.Size = UDim2.fromScale(0.7, 0.75)
-    Main.Position = UDim2.fromScale(0.15, 0.12)
-    Main.BackgroundColor3 = Theme.Background
-    Main.BorderSizePixel = 0
-    Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 12)
+    -- =====================
+    -- INDICATOR
+    -- =====================
+    local Indicator = Instance.new("Frame")
+    Indicator.Parent = TabBtn
+    Indicator.BackgroundColor3 = Theme.Accent
+    Indicator.Size = UDim2.new(0, 3, 0, 0)
+    Indicator.Position = UDim2.new(0, 0, 0.5, 0)
+    Indicator.Visible = false
+    Instance.new("UICorner", Indicator).CornerRadius = UDim.new(1, 0)
 
-    -- Sidebar
-    local Sidebar = Instance.new("Frame")
-    Sidebar.Parent = Main
-    Sidebar.Size = UDim2.new(0, 180, 1, 0)
-    Sidebar.BackgroundColor3 = Theme.Panel
-    Sidebar.BorderSizePixel = 0
+    -- =====================
+    -- CONTAINER
+    -- =====================
+    local Container = Instance.new("Frame")
+    Container.Parent = TabBtn
+    Container.Size = UDim2.new(1, 0, 1, 0)
+    Container.BackgroundTransparency = 1
 
-    local SideLayout = Instance.new("UIListLayout", Sidebar)
-    SideLayout.Padding = UDim.new(0, 6)
+    -- =====================
+    -- ICON
+    -- =====================
+    local IconImg = Instance.new("ImageLabel")
+    IconImg.Parent = Container
+    IconImg.Size = UDim2.fromOffset(20, 20)
+    IconImg.Position = UDim2.new(0, 12, 0.5, -10)
+    IconImg.BackgroundTransparency = 1
+    IconImg.Image = iconId or ""
+    IconImg.ImageColor3 = Theme.Text
 
-    -- Content holder
-    local Content = Instance.new("Frame")
-    Content.Parent = Main
-    Content.Position = UDim2.new(0, 180, 0, 0)
-    Content.Size = UDim2.new(1, -180, 1, 0)
-    Content.BackgroundTransparency = 1
+    -- =====================
+    -- LABEL
+    -- =====================
+    local TabLabel = Instance.new("TextLabel")
+    TabLabel.Parent = Container
+    TabLabel.Size = UDim2.new(1, -45, 1, 0)
+    TabLabel.Position = UDim2.fromOffset(40, 0)
+    TabLabel.BackgroundTransparency = 1
+    TabLabel.Text = "|  " .. text
+    TabLabel.TextColor3 = Theme.Text
+    TabLabel.Font = Enum.Font.GothamBold
+    TabLabel.TextSize = 14
+    TabLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    local Window = {}
-    local CurrentTab = nil
+    -- =====================
+    -- PAGE
+    -- =====================
+    local Page = Instance.new("Frame")
+    Page.Parent = Content
+    Page.Size = UDim2.new(1, 0, 1, 0)
+    Page.Visible = false
+    Page.BackgroundTransparency = 1
 
-    -- =========================
-    -- CREATE TAB (INI YANG KAMU TANYA)
-    -- =========================
-    function Window:CreateTab(name)
+    local PageLayout = Instance.new("UIListLayout")
+    PageLayout.Parent = Page
+    PageLayout.Padding = UDim.new(0, 10)
 
-        -- Sidebar Button
-        local TabButton = Instance.new("TextButton")
-        TabButton.Parent = Sidebar
-        TabButton.Size = UDim2.new(1, -12, 0, 36)
-        TabButton.BackgroundColor3 = Theme.Background
-        TabButton.BorderSizePixel = 0
-        TabButton.Text = (Icons[name] or "•") .. "  " .. name
-        TabButton.TextColor3 = Theme.Text
-        TabButton.Font = Enum.Font.Gotham
-        TabButton.TextSize = 13
-        TabButton.TextXAlignment = Enum.TextXAlignment.Left
-        TabButton.AutoButtonColor = false
-        Instance.new("UICorner", TabButton).CornerRadius = UDim.new(0, 8)
+    -- =====================
+    -- TAB CLICK
+    -- =====================
+    TabBtn.MouseButton1Click:Connect(function()
+        if currentIndicator and currentIndicator ~= Indicator then
+            TweenService:Create(
+                currentIndicator,
+                TweenInfo.new(0.2, Enum.EasingStyle.Quart),
+                { Size = UDim2.new(0, 3, 0, 0), Position = UDim2.new(0, 0, 0.5, 0) }
+            ):Play()
 
-        -- Tab Page
-        local Page = Instance.new("Frame")
-        Page.Parent = Content
-        Page.Size = UDim2.new(1, 0, 1, 0)
-        Page.Visible = false
-        Page.BackgroundTransparency = 1
-
-        local PageLayout = Instance.new("UIListLayout", Page)
-        PageLayout.Padding = UDim.new(0, 10)
-
-        -- Tab switching
-        TabButton.MouseButton1Click:Connect(function()
-            if CurrentTab then
-                CurrentTab.Visible = false
-            end
-            Page.Visible = true
-            CurrentTab = Page
-        end)
-
-        -- AUTO OPEN FIRST TAB
-        if not CurrentTab then
-            Page.Visible = true
-            CurrentTab = Page
+            TweenService:Create(
+                currentIndicator.Parent,
+                TweenInfo.new(0.2),
+                { BackgroundTransparency = 1 }
+            ):Play()
         end
 
-        -- =========================
-        -- TAB API (ELEMENTS)
-        -- =========================
-        local Tab = {}
-
-        function Tab:Paragraph(opt)
-            Elements:Paragraph(Page, Theme, opt)
+        if currentPage then
+            currentPage.Visible = false
         end
 
-        function Tab:Button(opt)
-            Elements:Button(Page, Theme, opt)
-        end
+        Indicator.Visible = true
+        Page.Visible = true
+        currentIndicator = Indicator
+        currentPage = Page
 
-        function Tab:Toggle(opt)
-            Elements:Toggle(Page, Theme, opt)
-        end
+        TweenService:Create(
+            Indicator,
+            TweenInfo.new(0.3, Enum.EasingStyle.Back),
+            { Size = UDim2.new(0, 3, 0.6, 0), Position = UDim2.new(0, 0, 0.2, 0) }
+        ):Play()
 
-        function Tab:Dropdown(opt)
-            Elements:Dropdown(Page, Theme, opt)
-        end
+        TweenService:Create(
+            TabBtn,
+            TweenInfo.new(0.3),
+            { BackgroundTransparency = 0.8, BackgroundColor3 = Color3.new(1,1,1) }
+        ):Play()
+    end)
 
-        return Tab
+    -- =====================
+    -- AUTO OPEN FIRST TAB
+    -- =====================
+    if not currentPage then
+        TabBtn:Activate()
+        Page.Visible = true
+        currentPage = Page
+        currentIndicator = Indicator
+        Indicator.Visible = true
     end
 
-    return Window
+    -- =====================
+    -- TAB API (ELEMENT)
+    -- =====================
+    local Tab = {}
+
+    function Tab:Paragraph(opt)
+        Elements:Paragraph(Page, Theme, opt)
+    end
+
+    function Tab:Button(opt)
+        Elements:Button(Page, Theme, opt)
+    end
+
+    function Tab:Toggle(opt)
+        Elements:Toggle(Page, Theme, opt)
+    end
+
+    function Tab:Dropdown(opt)
+        Elements:Dropdown(Page, Theme, opt)
+    end
+
+    return Tab
 end
