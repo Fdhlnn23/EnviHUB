@@ -8,65 +8,104 @@ local Elements = require("elements")
 
 return function()
 
-    local gui = Instance.new("ScreenGui", PlayerGui)
+    -- ScreenGui
+    local gui = Instance.new("ScreenGui")
     gui.Name = "EnviUI"
+    gui.ResetOnSpawn = false
+    gui.Parent = PlayerGui
 
-    local main = Instance.new("Frame", gui)
-    main.Size = UDim2.fromScale(0.7,0.75)
-    main.Position = UDim2.fromScale(0.15,0.12)
-    main.BackgroundColor3 = Theme.Background
-    main.BorderSizePixel = 0
-    Instance.new("UICorner", main).CornerRadius = UDim.new(0,12)
+    -- Main frame
+    local Main = Instance.new("Frame")
+    Main.Parent = gui
+    Main.Size = UDim2.fromScale(0.7, 0.75)
+    Main.Position = UDim2.fromScale(0.15, 0.12)
+    Main.BackgroundColor3 = Theme.Background
+    Main.BorderSizePixel = 0
+    Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 12)
 
-    local sidebar = Instance.new("Frame", main)
-    sidebar.Size = UDim2.new(0,170,1,0)
-    sidebar.BackgroundColor3 = Theme.Panel
-    sidebar.BorderSizePixel = 0
+    -- Sidebar
+    local Sidebar = Instance.new("Frame")
+    Sidebar.Parent = Main
+    Sidebar.Size = UDim2.new(0, 180, 1, 0)
+    Sidebar.BackgroundColor3 = Theme.Panel
+    Sidebar.BorderSizePixel = 0
 
-    local content = Instance.new("Frame", main)
-    content.Position = UDim2.new(0,170,0,0)
-    content.Size = UDim2.new(1,-170,1,0)
-    content.BackgroundTransparency = 1
+    local SideLayout = Instance.new("UIListLayout", Sidebar)
+    SideLayout.Padding = UDim.new(0, 6)
+
+    -- Content holder
+    local Content = Instance.new("Frame")
+    Content.Parent = Main
+    Content.Position = UDim2.new(0, 180, 0, 0)
+    Content.Size = UDim2.new(1, -180, 1, 0)
+    Content.BackgroundTransparency = 1
 
     local Window = {}
+    local CurrentTab = nil
 
+    -- =========================
+    -- CREATE TAB (INI YANG KAMU TANYA)
+    -- =========================
     function Window:CreateTab(name)
-        local btn = Instance.new("TextButton", sidebar)
-        btn.Size = UDim2.new(1,-12,0,36)
-        btn.Text = (Icons[name] or "•").."  "..name
-        btn.TextXAlignment = Enum.TextXAlignment.Left
-        btn.Font = Enum.Font.Gotham
-        btn.TextSize = 13
-        btn.TextColor3 = Theme.Text
-        btn.BackgroundColor3 = Theme.Background
-        btn.BorderSizePixel = 0
-        Instance.new("UICorner", btn).CornerRadius = UDim.new(0,8)
 
-        local page = Instance.new("Frame", content)
-        page.Size = UDim2.new(1,0,1,0)
-        page.Visible = false
-        page.BackgroundTransparency = 1
+        -- Sidebar Button
+        local TabButton = Instance.new("TextButton")
+        TabButton.Parent = Sidebar
+        TabButton.Size = UDim2.new(1, -12, 0, 36)
+        TabButton.BackgroundColor3 = Theme.Background
+        TabButton.BorderSizePixel = 0
+        TabButton.Text = (Icons[name] or "•") .. "  " .. name
+        TabButton.TextColor3 = Theme.Text
+        TabButton.Font = Enum.Font.Gotham
+        TabButton.TextSize = 13
+        TabButton.TextXAlignment = Enum.TextXAlignment.Left
+        TabButton.AutoButtonColor = false
+        Instance.new("UICorner", TabButton).CornerRadius = UDim.new(0, 8)
 
-        btn.MouseButton1Click:Connect(function()
-            for _,v in pairs(content:GetChildren()) do
-                if v:IsA("Frame") then v.Visible = false end
+        -- Tab Page
+        local Page = Instance.new("Frame")
+        Page.Parent = Content
+        Page.Size = UDim2.new(1, 0, 1, 0)
+        Page.Visible = false
+        Page.BackgroundTransparency = 1
+
+        local PageLayout = Instance.new("UIListLayout", Page)
+        PageLayout.Padding = UDim.new(0, 10)
+
+        -- Tab switching
+        TabButton.MouseButton1Click:Connect(function()
+            if CurrentTab then
+                CurrentTab.Visible = false
             end
-            page.Visible = true
+            Page.Visible = true
+            CurrentTab = Page
         end)
 
+        -- AUTO OPEN FIRST TAB
+        if not CurrentTab then
+            Page.Visible = true
+            CurrentTab = Page
+        end
+
+        -- =========================
+        -- TAB API (ELEMENTS)
+        -- =========================
         local Tab = {}
 
         function Tab:Paragraph(opt)
-            Elements:Paragraph(page, Theme, opt)
+            Elements:Paragraph(Page, Theme, opt)
         end
+
         function Tab:Button(opt)
-            Elements:Button(page, Theme, opt)
+            Elements:Button(Page, Theme, opt)
         end
+
         function Tab:Toggle(opt)
-            Elements:Toggle(page, Theme, opt)
+            Elements:Toggle(Page, Theme, opt)
         end
+
         function Tab:Dropdown(opt)
-            Elements:Dropdown(page, Theme, opt)
+            Elements:Dropdown(Page, Theme, opt)
         end
 
         return Tab
