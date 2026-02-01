@@ -1,4 +1,4 @@
-local EnviUI = require(game.ReplicatedStorage.EnviUI)
+local EnviUI = require(game.ReplicatedStorage.envi)
 
 local Window = EnviUI:CreateWindow()
 
@@ -8,8 +8,8 @@ Info:Paragraph({
 })
 
 Info:Button({
-    Title = "Join Discord",
+    Title = "Test Button",
     Callback = function()
-        print("clicked")
+        print("OK")
     end
 })
