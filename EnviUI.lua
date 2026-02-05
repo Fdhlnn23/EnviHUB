@@ -4,7 +4,7 @@ local PlayerGui = Player:WaitForChild("PlayerGui")
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
-local StatsService = game:GetService("StatsService")
+local StatsService = game:GetService("Stats").PerformanceStats
 local UserInputService = game:GetService("UserInputService")
 local HttpService = game:GetService("HttpService")
 
