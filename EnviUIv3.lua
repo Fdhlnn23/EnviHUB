@@ -918,12 +918,9 @@ local Library = {
     AddParagraph = AddParagraph,
     AddButton = AddButton,
     AddToggle = AddToggle,
-    AddSlider = AddSlider,
     AddDropdown = AddDropdown,
     AddSection = AddSection,
     AddTextbox = AddTextbox,
-    AddKeybind = AddKeybind,
-    AddColorPicker = AddColorPicker,
 }
 
 return Library
