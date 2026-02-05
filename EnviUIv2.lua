@@ -1045,17 +1045,17 @@ end
 -- TAB CREATION
 -- ===============================
 local Icons = {
-    ["Info"] = "rbxassetid://73226695432849",
-    ["Fishing"] = "rbxassetid://114347642817960",
-    ["Shop"] = "rbxassetid://104166424776310",
-    ["Automatically"] = "rbxassetid://104166424776310",
-    ["Trading"] = "rbxassetid://90028412534804",
-    ["Menu"] = "rbxassetid://91003594521266",
-    ["Quest"] = "rbxassetid://102931003401592",
-    ["Teleport"] = "rbxassetid://79671642021972",
-    ["Webhook"] = "rbxassetid://100592907832268",
-    ["Misc"] = "rbxassetid://99052235164442",
-    ["Config"] = "rbxassetid://88665465259311",
+    Info = "rbxassetid://73226695432849",
+    Fishing = "rbxassetid://114347642817960",
+    Shop = "rbxassetid://104166424776310",
+    Automatically = "rbxassetid://104166424776310",
+    Trading = "rbxassetid://90028412534804",
+    Menu = "rbxassetid://91003594521266",
+    Quest = "rbxassetid://102931003401592",
+    Teleport = "rbxassetid://79671642021972",
+    Webhook = "rbxassetid://100592907832268",
+    Misc = "rbxassetid://99052235164442",
+    Config = "rbxassetid://88665465259311",
 }
 
 local currentIndicator = nil
