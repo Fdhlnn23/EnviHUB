@@ -4,6 +4,7 @@ local PlayerGui = Player:WaitForChild("PlayerGui")
 local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
+local StatsService = game:GetService("StatsService")
 local UserInputService = game:GetService("UserInputService")
 local HttpService = game:GetService("HttpService")
 
@@ -1085,7 +1086,7 @@ local function CreateTab(text, iconId)
     IconImg.Size = UDim2.fromOffset(20, 20)
     IconImg.Position = UDim2.new(0, 12, 0.5, -10)
     IconImg.BackgroundTransparency = 1
-    IconImg.Image = iconId
+    IconImg.Image = iconId  or "rbxassetid://73226695432849"
     IconImg.ImageColor3 = Color3.new(1, 1, 1)
 
     local TabLabel = Instance.new("TextLabel", Container)
