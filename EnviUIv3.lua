@@ -397,96 +397,7 @@ local function AddToggle(parent, text, default, callback)
     return Tgl
 end
 
--- 4. SLIDER
-local function AddSlider(parent, text, min, max, default, callback)
-    local SliderFrame = Instance.new("Frame", parent)
-    SliderFrame.Size = UDim2.new(0.96, 0, 0, 50)
-    SliderFrame.BackgroundTransparency = 1
-    
-    local TitleL = Instance.new("TextLabel", SliderFrame)
-    TitleL.Size = UDim2.new(1, 0, 0, 20)
-    TitleL.BackgroundTransparency = 1
-    TitleL.Text = text
-    TitleL.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TitleL.Font = Enum.Font.GothamBold
-    TitleL.TextSize = 14
-    TitleL.TextXAlignment = Enum.TextXAlignment.Left
-    
-    local ValueLabel = Instance.new("TextLabel", SliderFrame)
-    ValueLabel.Size = UDim2.new(0, 50, 0, 20)
-    ValueLabel.Position = UDim2.new(1, -50, 0, 0)
-    ValueLabel.BackgroundTransparency = 1
-    ValueLabel.Text = tostring(default)
-    ValueLabel.TextColor3 = Color3.fromRGB(255, 0, 200)
-    ValueLabel.Font = Enum.Font.GothamBold
-    ValueLabel.TextSize = 14
-    ValueLabel.TextXAlignment = Enum.TextXAlignment.Right
-    
-    local SliderBack = Instance.new("Frame", SliderFrame)
-    SliderBack.Size = UDim2.new(1, 0, 0, 6)
-    SliderBack.Position = UDim2.new(0, 0, 1, -10)
-    SliderBack.BackgroundColor3 = Color3.fromRGB(40, 15, 60)
-    Instance.new("UICorner", SliderBack).CornerRadius = UDim.new(1, 0)
-    
-    local SliderFill = Instance.new("Frame", SliderBack)
-    SliderFill.Size = UDim2.new((default - min) / (max - min), 0, 1, 0)
-    SliderFill.BackgroundColor3 = Color3.fromRGB(255, 0, 200)
-    SliderFill.BorderSizePixel = 0
-    Instance.new("UICorner", SliderFill).CornerRadius = UDim.new(1, 0)
-    
-    local SliderButton = Instance.new("TextButton", SliderBack)
-    SliderButton.Size = UDim2.new(1, 0, 1, 10)
-    SliderButton.Position = UDim2.new(0, 0, 0, -5)
-    SliderButton.BackgroundTransparency = 1
-    SliderButton.Text = ""
-    
-    local dragging = false
-    
-    local function UpdateSlider(input)
-        local pos = math.clamp((input.Position.X - SliderBack.AbsolutePosition.X) / SliderBack.AbsoluteSize.X, 0, 1)
-        local value = math.floor(min + (max - min) * pos)
-        
-        SliderFill.Size = UDim2.new(pos, 0, 1, 0)
-        ValueLabel.Text = tostring(value)
-        
-        if callback then callback(value) end
-    end
-    
-    SliderButton.MouseButton1Down:Connect(function()
-        dragging = true
-    end)
-    
-    UserInputService.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = false
-        end
-    end)
-    
-    UserInputService.InputChanged:Connect(function(input)
-        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-            UpdateSlider(input)
-        end
-    end)
-    
-    SliderButton.MouseButton1Click:Connect(function(input)
-        UpdateSlider(input)
-    end)
-    
-    SliderFrame.SetValue = function(value)
-        value = math.clamp(value, min, max)
-        local pos = (value - min) / (max - min)
-        SliderFill.Size = UDim2.new(pos, 0, 1, 0)
-        ValueLabel.Text = tostring(value)
-    end
-    
-    SliderFrame.GetValue = function()
-        return tonumber(ValueLabel.Text)
-    end
-    
-    return SliderFrame
-end
-
--- 5. DROPDOWN (IMPROVED)
+-- 4. DROPDOWN (IMPROVED)
 local function AddDropdown(parent, text, options, callback, config)
     config = config or {}
     local isMultiSelect = config.multiSelect or false
@@ -817,7 +728,7 @@ local function AddDropdown(parent, text, options, callback, config)
     return Drop
 end
 
--- 6. SECTION
+-- 5. SECTION
 local function AddSection(parent, text)
     local Sec = Instance.new("Frame", parent)
     Sec.Size = UDim2.new(0.96, 0, 0, 35)
@@ -875,7 +786,7 @@ local function AddSection(parent, text)
     return Container
 end
 
--- 7. TEXTBOX
+-- 6. TEXTBOX
 local function AddTextbox(parent, text, placeholder, callback)
     local TextboxFrame = Instance.new("Frame", parent)
     TextboxFrame.Size = UDim2.new(0.96, 0, 0, 40)
@@ -924,120 +835,6 @@ local function AddTextbox(parent, text, placeholder, callback)
     end
     
     return TextboxFrame
-end
-
--- 8. KEYBIND
-local function AddKeybind(parent, text, default, callback)
-    local KeybindFrame = Instance.new("Frame", parent)
-    KeybindFrame.Size = UDim2.new(0.96, 0, 0, 40)
-    KeybindFrame.BackgroundTransparency = 1
-    
-    local TitleL = Instance.new("TextLabel", KeybindFrame)
-    TitleL.Size = UDim2.new(0.6, 0, 1, 0)
-    TitleL.BackgroundTransparency = 1
-    TitleL.Text = text
-    TitleL.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TitleL.Font = Enum.Font.GothamBold
-    TitleL.TextSize = 14
-    TitleL.TextXAlignment = Enum.TextXAlignment.Left
-    
-    local KeyBtn = Instance.new("TextButton", KeybindFrame)
-    KeyBtn.Size = UDim2.new(0, 80, 0.8, 0)
-    KeyBtn.Position = UDim2.new(1, -5, 0.5, 0)
-    KeyBtn.AnchorPoint = Vector2.new(1, 0.5)
-    KeyBtn.BackgroundColor3 = Color3.fromRGB(60, 20, 80)
-    KeyBtn.Text = default or "None"
-    KeyBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    KeyBtn.Font = Enum.Font.GothamBold
-    KeyBtn.TextSize = 13
-    KeyBtn.AutoButtonColor = false
-    Instance.new("UICorner", KeyBtn).CornerRadius = UDim.new(0, 6)
-    
-    local currentKey = default
-    local binding = false
-    
-    KeyBtn.MouseButton1Click:Connect(function()
-        if not binding then
-            binding = true
-            KeyBtn.Text = "..."
-            
-            local connection
-            connection = UserInputService.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.Keyboard then
-                    local key = input.KeyCode.Name
-                    currentKey = key
-                    KeyBtn.Text = key
-                    binding = false
-                    connection:Disconnect()
-                    if callback then callback(key) end
-                end
-            end)
-        end
-    end)
-    
-    KeybindFrame.SetValue = function(key)
-        currentKey = key
-        KeyBtn.Text = key
-    end
-    
-    KeybindFrame.GetValue = function()
-        return currentKey
-    end
-    
-    return KeybindFrame
-end
-
--- 9. COLOR PICKER
-local function AddColorPicker(parent, text, default, callback)
-    local ColorFrame = Instance.new("Frame", parent)
-    ColorFrame.Size = UDim2.new(0.96, 0, 0, 40)
-    ColorFrame.BackgroundTransparency = 1
-    
-    local TitleL = Instance.new("TextLabel", ColorFrame)
-    TitleL.Size = UDim2.new(0.7, 0, 1, 0)
-    TitleL.BackgroundTransparency = 1
-    TitleL.Text = text
-    TitleL.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TitleL.Font = Enum.Font.GothamBold
-    TitleL.TextSize = 14
-    TitleL.TextXAlignment = Enum.TextXAlignment.Left
-    
-    local ColorBox = Instance.new("TextButton", ColorFrame)
-    ColorBox.Size = UDim2.fromOffset(35, 25)
-    ColorBox.Position = UDim2.new(1, -5, 0.5, 0)
-    ColorBox.AnchorPoint = Vector2.new(1, 0.5)
-    ColorBox.BackgroundColor3 = default or Color3.fromRGB(255, 0, 200)
-    ColorBox.Text = ""
-    ColorBox.AutoButtonColor = false
-    Instance.new("UICorner", ColorBox).CornerRadius = UDim.new(0, 4)
-    
-    local Stroke = Instance.new("UIStroke", ColorBox)
-    Stroke.Color = Color3.fromRGB(255, 255, 255)
-    Stroke.Thickness = 1
-    
-    local currentColor = default or Color3.fromRGB(255, 0, 200)
-    
-    -- Simple color picker (you can expand this with RGB sliders)
-    ColorBox.MouseButton1Click:Connect(function()
-        -- This is a placeholder - implement full color picker UI if needed
-        local r = math.random(0, 255)
-        local g = math.random(0, 255)
-        local b = math.random(0, 255)
-        currentColor = Color3.fromRGB(r, g, b)
-        ColorBox.BackgroundColor3 = currentColor
-        if callback then callback(currentColor) end
-    end)
-    
-    ColorFrame.SetValue = function(color)
-        currentColor = color
-        ColorBox.BackgroundColor3 = color
-    end
-    
-    ColorFrame.GetValue = function()
-        return currentColor
-    end
-    
-    return ColorFrame
 end
 
 -- ===============================
