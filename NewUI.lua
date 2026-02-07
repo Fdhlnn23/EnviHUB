@@ -73,6 +73,7 @@ local Icons = {
     eyes      = "rbxassetid://14321059114",
     sword     = "rbxassetid://82472368671405",
     discord   = "rbxassetid://94434236999817",
+    discord2  = "rbxassetid://100592907832268",
     star      = "rbxassetid://107005941750079",
     skeleton  = "rbxassetid://17313330026",
     payment   = "rbxassetid://18747025078",
