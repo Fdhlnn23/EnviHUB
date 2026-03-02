@@ -267,7 +267,7 @@ function Menghub:MakeNotify(NotifyConfig)
     NotifyConfig.Title = NotifyConfig.Title or "Napoleon"
     NotifyConfig.Description = NotifyConfig.Description or "Notification"
     NotifyConfig.Content = NotifyConfig.Content or "Content"
-    NotifyConfig.Icon = NotifyConfig.Icon or "93732999692312"
+    NotifyConfig.Icon = NotifyConfig.Icon or "96531489912535"
     NotifyConfig.Color = NotifyConfig.Color or Color3.fromRGB(255, 0, 255)
     NotifyConfig.Time = NotifyConfig.Time or 0.5
     NotifyConfig.Delay = NotifyConfig.Delay or 5
