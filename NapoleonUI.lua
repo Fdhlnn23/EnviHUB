@@ -1,17 +1,17 @@
 local HttpService = game:GetService("HttpService")
 
-if not isfolder("Meng Hub") then
-    makefolder("Meng Hub")
+if not isfolder("Napoleon") then
+    makefolder("Napoleon")
 end
-if not isfolder("Meng Hub/Config") then
-    makefolder("Meng Hub/Config")
+if not isfolder("Napoleon/Config") then
+    makefolder("Napoleon/Config")
 end
 
 local gameName   = tostring(game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name)
 gameName         = gameName:gsub("[^%w_ ]", "")
 gameName         = gameName:gsub("%s+", "_")
 
-local ConfigFile = "Meng Hub/Config/MengHub_" .. gameName .. ".json"
+local ConfigFile = "Napoleon/Config/Napoleon_" .. gameName .. ".json"
 
 ConfigData       = {}
 Elements         = {}
@@ -264,7 +264,7 @@ end
 local Menghub = {}
 function Menghub:MakeNotify(NotifyConfig)
     local NotifyConfig = NotifyConfig or {}
-    NotifyConfig.Title = NotifyConfig.Title or "Meng Hub"
+    NotifyConfig.Title = NotifyConfig.Title or "Napoleon"
     NotifyConfig.Description = NotifyConfig.Description or "Notification"
     NotifyConfig.Content = NotifyConfig.Content or "Content"
     NotifyConfig.Icon = NotifyConfig.Icon or "93732999692312"
@@ -476,7 +476,7 @@ end
 
 function notif(msg, delay, color, title, desc)
     return Menghub:MakeNotify({
-        Title = title or "Meng Hub",
+        Title = title or "Napoleon",
         Description = desc or "Notification",
         Content = msg or "Content",
         Color = color or Color3.fromRGB(232, 145, 234),
@@ -486,8 +486,8 @@ end
 
 function Menghub:Window(GuiConfig)
     GuiConfig              = GuiConfig or {}
-    GuiConfig.Title        = GuiConfig.Title or "Meng Hub"
-    GuiConfig.Footer       = GuiConfig.Footer or "MengHub >:D"
+    GuiConfig.Title        = GuiConfig.Title or "Napoleon"
+    GuiConfig.Footer       = GuiConfig.Footer or "Napoleon >:D"
     GuiConfig.Color        = GuiConfig.Color or Color3.fromRGB(255, 0, 255)
     GuiConfig["Tab Width"] = GuiConfig["Tab Width"] or 120
     GuiConfig.Version      = GuiConfig.Version or 1
@@ -914,7 +914,7 @@ function Menghub:Window(GuiConfig)
         Title.Position = UDim2.new(0, 0, 0, 4)
         Title.BackgroundTransparency = 1
         Title.Font = Enum.Font.GothamBold
-        Title.Text = "Meng Hub Window"
+        Title.Text = "Napoleon Window"
         Title.TextSize = 22
         Title.TextColor3 = Color3.fromRGB(255, 255, 255)
         Title.ZIndex = 52
@@ -2817,7 +2817,7 @@ end
 
 return Menghub
 
---[local Window = Menghub:Window({
+--local Window = Menghub:Window({
 --	Title = "Napoleon",
 --	Footer = "[Fisch] [v1.0] [JOKI ROD? D STORE SOLUSINYA]",
 --	Color = Color3.fromRGB(255, 255, 255),
