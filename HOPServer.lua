@@ -7,16 +7,14 @@ local player = Players.LocalPlayer
 local placeId = game.PlaceId
 
 local MAX_PING = 90
-local checkedServers = {}
 
 -- ambil ping
 local function getPing()
     local pingStr = Stats.Network.ServerStatsItem["Data Ping"]:GetValueString()
-    local ping = tonumber(string.match(pingStr, "%d+"))
-    return ping
+    return tonumber(string.match(pingStr, "%d+"))
 end
 
--- ambil server
+-- ambil server list
 local function getServers(cursor)
     local url = "https://games.roblox.com/v1/games/"..placeId.."/servers/Public?sortOrder=Asc&limit=100"
     if cursor then
@@ -27,9 +25,7 @@ local function getServers(cursor)
         return HttpService:JSONDecode(game:HttpGet(url))
     end)
     
-    if success then
-        return result
-    end
+    if success then return result end
 end
 
 -- cari server
@@ -40,12 +36,9 @@ local function findServer()
         local data = getServers(cursor)
         if not data then break end
         
-        for _, server in pairs(data.data) do
-            if server.playing < server.maxPlayers - 3 then
-                if not checkedServers[server.id] then
-                    checkedServers[server.id] = true
-                    return server.id
-                end
+        for _, s in pairs(data.data) do
+            if s.playing < s.maxPlayers - 3 then
+                return s.id
             end
         end
         
@@ -54,36 +47,38 @@ local function findServer()
     end
 end
 
--- function utama
-local function main()
-    while true do
-        task.wait(5)
-        
-        local ping = getPing()
-        print("Ping:", ping)
+-- 🔥 penting: isi script diri sendiri (self-queue)
+local SOURCE = [[
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Fdhlnn23/EnviHUB/refs/heads/main/HOPServer.lua"))()
+]]
 
-        if ping and ping <= MAX_PING then
-            print("✅ Dapet server bagus, stop.")
-            break
+-- loop utama
+while true do
+    task.wait(5)
+
+    local ping = getPing()
+    print("Ping:", ping)
+
+    if ping and ping <= MAX_PING then
+        print("✅ Udah dapet server bagus, stop.")
+        break
+    end
+
+    print("❌ Ping jelek, hopping...")
+
+    local serverId = findServer()
+
+    if serverId then
+        -- 🔑 ini biar terus jalan tiap teleport
+        if queue_on_teleport then
+            queue_on_teleport(SOURCE)
+        elseif syn and syn.queue_on_teleport then
+            syn.queue_on_teleport(SOURCE)
         end
 
-        print("❌ Ping tinggi, pindah server...")
-
-        local serverId = findServer()
-        
-        if serverId then
-            -- ini kunci nya!
-            if queue_on_teleport then
-                queue_on_teleport(game:HttpGet("https://raw.githubusercontent.com/Fdhlnn23/EnviHUB/refs/heads/main/HOPServer.lua"))
-            end
-            
-            task.wait(2)
-            TeleportService:TeleportToPlaceInstance(placeId, serverId, player)
-        else
-            print("Retry cari server...")
-            task.wait(3)
-        end
+        task.wait(2)
+        TeleportService:TeleportToPlaceInstance(placeId, serverId, player)
+    else
+        task.wait(3)
     end
 end
-
-main()
