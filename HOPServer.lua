@@ -74,7 +74,7 @@ local function main()
         if serverId then
             -- ini kunci nya!
             if queue_on_teleport then
-                queue_on_teleport(game:HttpGet("https://pastebin.com/raw/ISI_SCRIPT_KAMU"))
+                queue_on_teleport(game:HttpGet("https://raw.githubusercontent.com/Fdhlnn23/EnviHUB/refs/heads/main/HOPServer.lua"))
             end
             
             task.wait(2)
